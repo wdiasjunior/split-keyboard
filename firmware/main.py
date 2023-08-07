@@ -33,6 +33,10 @@ keyboard.modules = [layers, split]
 keyboard.extensions.append(MediaKeys())
 
 # figure out ç - RALT + comma? -> maybe setxkbmap works out of the box?
+# light up led on capslock
+# right super and 3rd space bar
+# tap dance + macros?
+# fn + right super -> mouse jitter?
 
 keyboard.keymap = [
   [
