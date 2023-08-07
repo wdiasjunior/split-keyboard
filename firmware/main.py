@@ -1,12 +1,11 @@
 import board
 
 from kb import KMKKeyboard
-# from kb import data_pin
 from kmk.keys import KC
 from kmk.modules.layers import Layers
 from kmk.extensions.media_keys import MediaKeys
 from kmk.modules.split import Split, SplitSide, SplitType
-# from kmk.hid import HIDModes
+from kmk.hid import HIDModes
 
 keyboard = KMKKeyboard()
 
@@ -31,6 +30,8 @@ split = Split(
 
 keyboard.modules = [layers, split]
 keyboard.extensions.append(MediaKeys())
+
+keyboard.debug_enabled = True
 
 # figure out ç - RALT + comma? -> maybe setxkbmap works out of the box?
 # light up led on capslock
@@ -58,5 +59,4 @@ keyboard.keymap = [
 ]
 
 if __name__ == "__main__":
-  keyboard.go()
-  # keyboard.go(hid_type=HIDModes.USB)
+  keyboard.go(hid_type=HIDModes.USB)

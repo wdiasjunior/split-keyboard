@@ -5,9 +5,10 @@ from kmk.scanners import DiodeOrientation
 
 
 class KMKKeyboard(_KMKKeyboard):
+  # TODO Comment one of these on each side
   col_pins = (board.GP10, board.GP11, board.GP12, board.GP13, board.GP14, board.GP15)
+  # col_pins = (board.GP6, board.GP7, board.GP8, board.GP9, board.GP10, board.GP11, board.GP12, board.GP13, board.GP14, board.GP15)
   row_pins = (board.GP21, board.GP20, board.GP19, board.GP18, board.GP17, board.GP16)
-  # keyboard.row_pins = (board.GP28, board.GP27, board.GP26, board.GP25, board.GP24, board.GP23, board.GP22, board.GP21, board.GP20, board.GP19, board.GP18, board.GP17, board.GP16)
 
   diode_orientation = DiodeOrientation.COLUMNS
   # diode_orientation = DiodeOrientation.COL2ROW
