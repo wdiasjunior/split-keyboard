@@ -1,6 +1,6 @@
 import board
 
-from kb import KMKKeyboard
+from kb import KMKKeyboard, isRight
 from kmk.keys import KC
 from kmk.modules.layers import Layers
 from kmk.extensions.media_keys import MediaKeys
@@ -11,20 +11,17 @@ keyboard = KMKKeyboard()
 
 layers = Layers()
 
-# TODO Comment one of these on each side
-split_side = SplitSide.LEFT
-# split_side = SplitSide.RIGHT
-
-data_pin = board.GP1 if split_side == SplitSide.LEFT else board.GP0
-data_pin2 = board.GP0 if split_side == SplitSide.LEFT else board.GP1
+split_side = SplitSide.RIGHT if isRight else SplitSide.LEFT
 
 split = Split(
   split_side=split_side,
   split_type=SplitType.UART,
-  data_pin=data_pin,
-  data_pin2=data_pin2,
+  data_pin=board.GP0,
+  data_pin2=board.GP1,
   uart_flip=True,
+  use_pio=True,
   # uart_interval=20,
+  split_flip=False,
   split_target_left=True,
 )
 
@@ -33,7 +30,6 @@ keyboard.extensions.append(MediaKeys())
 
 keyboard.debug_enabled = True
 
-# figure out ç - RALT + comma? -> maybe setxkbmap works out of the box?
 # light up led on capslock
 # right super and 3rd space bar
 # tap dance + macros?
