@@ -1,11 +1,13 @@
 import board
-
+import digitalio
 from kb import KMKKeyboard, isRight
 from kmk.keys import KC
-from kmk.modules.layers import Layers
-from kmk.extensions.media_keys import MediaKeys
-from kmk.modules.split import Split, SplitSide, SplitType
 from kmk.hid import HIDModes
+from kmk.modules.layers import Layers
+from kmk.modules.split import Split, SplitSide, SplitType
+from kmk.extensions.media_keys import MediaKeys
+from kmk.extensions.lock_status import LockStatus
+from kmk.extensions.LED import LED
 
 keyboard = KMKKeyboard()
 
@@ -25,8 +27,25 @@ split = Split(
   split_target_left=True,
 )
 
+leds = LED(led_pin=[board.GP25])
+
+class LEDLockStatus(LockStatus):
+  def set_lock_leds(self):
+    if not isRight:
+      if self.get_caps_lock():
+        leds.set_brightness(50, leds=[0])
+      else:
+        leds.set_brightness(0, leds=[0])
+
+  def after_hid_send(self, sandbox):
+    super().after_hid_send(sandbox)
+    if self.report_updated:
+      self.set_lock_leds()
+
 keyboard.modules = [layers, split]
 keyboard.extensions.append(MediaKeys())
+keyboard.extensions.append(leds)
+keyboard.extensions.append(LEDLockStatus())
 
 keyboard.debug_enabled = True
 
