@@ -64,6 +64,11 @@ keyboard.extensions.append(LEDLockStatus())
 
 keyboard.debug_enabled = True
 
+# TODO
+# setup window manager modifiers
+
+MODwm = KC.LCMD + KC.LALT + KC.LSFT
+
 keyboard.keymap = [
   # layer 0
   [
@@ -72,16 +77,16 @@ keyboard.keymap = [
     KC.TAB,  KC.Q,    KC.W,    KC.E,   KC.R,   KC.T,        KC.Y, KC.U, KC.I, KC.O, KC.P, KC.LBRC, KC.RBRC, KC.BSLS,              KC.END,\
     KC.CAPS, KC.A,    KC.S,    KC.D,   KC.F,   KC.G,        KC.H, KC.J, KC.K, KC.L, KC.SCLN, KC.QUOT, KC.ENTER,                   KC.PGUP,\
     KC.LSFT, KC.Z,    KC.X,    KC.C,   KC.V,   KC.B,        KC.N, KC.M, KC.COMMA, KC.DOT, KC.SLSH, KC.RSFT, KC.UP,                KC.PGDOWN,\
-    KC.LCTL, KC.LCMD, KC.LALT,    KC.SPC,    KC.SPC,        KC.SPC, KC.RALT, KC.MO(1), KC.RCTL, KC.LEFT, KC.DOWN, KC.RIGHT,       KC.RCMD,
+    KC.LCTL, KC.LCMD, KC.LALT,    KC.SPC,  KC.MO(1),        KC.SPC, KC.RALT, KC.MO(1), KC.RCTL, KC.LEFT, KC.DOWN, KC.RIGHT,       KC.RCMD,
   ],
-  # layer 1
+  # layer 1 - media controls and window manager stuff
   [
     KC.NO,  KC.NO, KC.NO, KC.NO, KC.BRID, KC.BRIU,          KC.MPRV, KC.MPLY, KC.MNXT, KC.MUTE, KC.VOLD, KC.VOLU, LAYER_0, KC.PAUS, KC.NO,  KC.NO,\
     KC.NO,  KC.NO, KC.NO, KC.NO, KC.NO,   KC.NO,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, LAYER_2, KC.NO,                       KC.NO,\
-    KC.NO,  KC.NO, KC.NO, KC.NO, KC.NO,   KC.NO,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                         KC.NO,\
+    KC.NO,  __Q__, KC.NO, KC.NO, KC.NO,   KC.NO,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                         KC.NO,\
     KC.NO,  KC.NO, KC.NO, KC.NO, KC.NO,   KC.NO,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                                KC.NO,\
     KC.NO,  KC.NO, KC.NO, KC.NO, KC.NO,   KC.NO,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                                KC.NO,\
-    KC.NO,  KC.NO, KC.NO,     KC.NO,    KC.NO,              KC.NO, KC.NO, KC.TRNS, KC.NO, KC.NO, KC.NO, KC.NO,                              KC.NO,
+    KC.NO,  KC.NO, KC.NO,     KC.NO,    MODwm,              KC.NO, KC.NO, KC.TRNS, KC.NO, KC.NO, KC.NO, KC.NO,                              KC.NO,
   ],
   # layer 2 - same as layer 0, but swaps L-super with L-ctrl
   [
