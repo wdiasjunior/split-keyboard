@@ -5,16 +5,18 @@ from kmk.keys import KC
 from kmk.hid import HIDModes
 from kmk.modules.layers import Layers
 from kmk.modules.split import Split, SplitSide, SplitType
+from kmk.modules.holdtap import HoldTap
 from kmk.extensions.media_keys import MediaKeys
 from kmk.extensions.lock_status import LockStatus
 from kmk.extensions.LED import LED
 
-split_side = SplitSide.RIGHT if isRightSide else SplitSide.LEFT
+splitSide = SplitSide.RIGHT if isRightSide else SplitSide.LEFT
 
 keyboard = KMKKeyboard()
 layers = Layers()
+holdtap = HoldTap()
 split = Split(
-  split_side=split_side,
+  split_side=splitSide,
   split_type=SplitType.UART,
   data_pin=board.GP0,
   data_pin2=board.GP1,
@@ -62,15 +64,16 @@ keyboard.before_start = init_led_state
 LAYER_2.after_press_handler(set_layer_led_on)
 LAYER_0.after_press_handler(set_layer_led_off)
 
+# TODO - configure a mouse jiggler and blink the LED to indicate active state
+
 keyboard.modules.append(layers)
 keyboard.modules.append(split)
-keyboard.extensions.append(MediaKeys())
+keyboard.modules.append(holdtap)
 keyboard.extensions.append(leds)
+keyboard.extensions.append(MediaKeys())
 keyboard.extensions.append(LEDLockStatus())
 
-keyboard.debug_enabled = True # change to False
-
-# TODO - configure a mouse jiggler and blink the LED to indicate active state
+keyboard.debug_enabled = True # change to False - probably has overhead issues
 
 # TODO - try home row mods
 # A - left super
@@ -84,6 +87,17 @@ keyboard.debug_enabled = True # change to False
 # L - left super
 
 # mod keys
+HT_SPC = holdtap.HoldTap(
+  tap=KC.SPC,
+  hold=KC.MO(1),
+  prefer_hold=True,
+  tap_time=200,
+)
+
+# TODO
+# - holdtap - tap left space acts as space, hold acts as mod key
+# - cheat sheet on the terminal do remind me of this shit
+
 # MODwm = KC.LCMD(KC.LALT(KC.LSFT))
 _L1Q_ = KC.LCMD(KC.N1) # firefox
 _L1W_ = KC.LCMD(KC.N2) # chrome
@@ -92,11 +106,13 @@ _L1R_ = KC.LCMD(KC.N4) # atom
 _L1T_ = KC.LCTL(KC.LALT(KC.T)) # new terminal instance
 _L1Y_ = KC.LCTL(KC.LSFT(KC.T)) # new terminal tab/reopen closed browser tab
 _L1U_ = KC.LCTL(KC.T) # new broser tab
-
+#
 _L1D_ = KC.LCMD(KC.N8) # discord
 _L1F_ = KC.LCMD(KC.N5) # zed
 _L1G_ = KC.LCMD(KC.N9) # toggle active terminal instances
 _L1B_ = KC.LCMD(KC.N6) # spotify
+
+# TODO - setup Krohnkite? switch to an actual window manager?
 
 keyboard.keymap = [
   # layer 0 - default qwerty layout
@@ -106,7 +122,7 @@ keyboard.keymap = [
     KC.TAB,  KC.Q,    KC.W,    KC.E,   KC.R,   KC.T,        KC.Y, KC.U, KC.I, KC.O, KC.P, KC.LBRC, KC.RBRC, KC.BSLS,              KC.END,\
     KC.CAPS, KC.A,    KC.S,    KC.D,   KC.F,   KC.G,        KC.H, KC.J, KC.K, KC.L, KC.SCLN, KC.QUOT, KC.ENTER,                   KC.PGUP,\
     KC.LSFT, KC.Z,    KC.X,    KC.C,   KC.V,   KC.B,        KC.N, KC.M, KC.COMMA, KC.DOT, KC.SLSH, KC.RSFT, KC.UP,                KC.PGDOWN,\
-    KC.LCTL, KC.LCMD, KC.LALT,  KC.SPC,    KC.MO(1),        KC.SPC, KC.RALT, KC.MO(1), KC.RCTL, KC.LEFT, KC.DOWN, KC.RIGHT,       KC.RCMD,
+    KC.LCTL, KC.LCMD, KC.LALT,    KC.SPC,    HT_SPC,        KC.SPC, KC.RALT, KC.MO(1), KC.RCTL, KC.LEFT, KC.DOWN, KC.RIGHT,       KC.RCMD,
   ],
   # layer 1 - media controls and window manager stuff
   [
