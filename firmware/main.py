@@ -1,5 +1,4 @@
 import board
-import digitalio
 from kb import KMKKeyboard, isRightSide
 from kmk.keys import KC
 from kmk.hid import HIDModes
@@ -8,6 +7,7 @@ from kmk.modules.split import Split, SplitSide, SplitType
 from kmk.modules.holdtap import HoldTap
 from kmk.extensions.media_keys import MediaKeys
 from kmk.extensions.lock_status import LockStatus
+from kmk.modules.mouse_jiggler import MouseJiggler
 from kmk.extensions.LED import LED
 
 splitSide = SplitSide.RIGHT if isRightSide else SplitSide.LEFT
@@ -26,7 +26,11 @@ split = Split(
   split_flip=False,
   split_target_left=True,
 )
-
+# TODO - configure a mouse jiggler and blink the LED to indicate active state
+jiggler = MouseJiggler( # blink both LEDs if active?
+  period_ms=5000,
+  move_step=1,
+)
 leds = LED(led_pin=[board.GP25])
 
 # capslock led
@@ -64,11 +68,10 @@ keyboard.before_start = init_led_state
 LAYER_2.after_press_handler(set_layer_led_on)
 LAYER_0.after_press_handler(set_layer_led_off)
 
-# TODO - configure a mouse jiggler and blink the LED to indicate active state
-
 keyboard.modules.append(layers)
 keyboard.modules.append(split)
 keyboard.modules.append(holdtap)
+keyboard.modules.append(jiggler)
 keyboard.extensions.append(leds)
 keyboard.extensions.append(MediaKeys())
 keyboard.extensions.append(LEDLockStatus())
@@ -127,13 +130,13 @@ keyboard.keymap = [
   # layer 1 - media controls and window manager stuff
   [
     KC.NO,  KC.NO, KC.NO, KC.NO, KC.BRID, KC.BRIU,          KC.MPRV, KC.MPLY, KC.MNXT, KC.MUTE, KC.VOLD, KC.VOLU, LAYER_0, KC.PAUS, KC.NO,  KC.NO,\
-    KC.NO,  KC.NO, KC.NO, KC.NO, KC.NO,   KC.NO,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,             LAYER_2, KC.NO,           KC.NO,\
+    KC.NO,  KC.NO, KC.NO, KC.NO, KC.NO,   KC.NO,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.MJ_TOGGLE,      LAYER_2, KC.NO,           KC.NO,\
     KC.NO,  _L1Q_, _L1W_, _L1E_, _L1R_,   _L1T_,            _L1Y_, _L1U_, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                         KC.NO,\
     KC.NO,  KC.NO, KC.NO, _L1D_, _L1F_,   _L1G_,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                                KC.NO,\
     KC.NO,  KC.NO, KC.NO, KC.NO, KC.NO,   _L1B_,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                                KC.NO,\
     KC.NO,  KC.NO, KC.NO,     KC.NO,    KC.TRNS,            KC.NO, KC.NO, KC.TRNS, KC.NO, KC.NO, KC.NO, KC.NO,                              KC.NO,
   ],
-  # layer 2 (gaming) - same as layer 0, but swaps L-super with another L-ctrl to avoid exiting full screen
+  # layer 2 (gaming) - same as layer 0, but swaps L-super with another L-ctrl to avoid exiting full screen, removed tilde to prevent opening console in games
   [
     KC.ESC,  KC.F1,   KC.F2,   KC.F3,  KC.F4,  KC.F5,       KC.F6, KC.F7, KC.F8, KC.F9, KC.F10, KC.F11, KC.F12, KC.SLCK, KC.PSCR, KC.DEL,\
     KC.NO ,  KC.N1,   KC.N2,   KC.N3,  KC.N4,  KC.N5,       KC.N6, KC.N7, KC.N8, KC.N9, KC.N0, KC.MINS, KC.EQL, KC.BSPC,          KC.HOME,\
