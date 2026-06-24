@@ -26,10 +26,9 @@ split = Split(
   split_flip=False,
   split_target_left=True,
 )
-# TODO - configure a mouse jiggler and blink the LED to indicate active state
-jiggler = MouseJiggler( # blink both LEDs if active?
-  period_ms=5000,
-  move_step=1,
+jiggler = MouseJiggler(
+  period_ms=3000,
+  move_step=10,
 )
 leds = LED(led_pin=[board.GP25])
 
@@ -49,6 +48,7 @@ class LEDLockStatus(LockStatus):
 
 LAYER_0 = KC.TO(0)
 LAYER_2 = KC.TO(2)
+MJ_TOGGLE = KC.MJ_TOGGLE
 
 # layer 2 active led
 def set_layer_led_on(key, keyboard, *args):
@@ -67,6 +67,16 @@ keyboard.before_start = init_led_state
 
 LAYER_2.after_press_handler(set_layer_led_on)
 LAYER_0.after_press_handler(set_layer_led_off)
+
+# jiggler active led
+jiggler_active = False
+
+def toggle_jiggler_led(key, keyboard, *args):
+  global jiggler_active
+  jiggler_active = not jiggler_active
+  leds.set_brightness(50 if jiggler_active else 0, leds=[0])
+
+MJ_TOGGLE.after_press_handler(toggle_jiggler_led)
 
 keyboard.modules.append(layers)
 keyboard.modules.append(split)
@@ -130,7 +140,7 @@ keyboard.keymap = [
   # layer 1 - media controls and window manager stuff
   [
     KC.NO,  KC.NO, KC.NO, KC.NO, KC.BRID, KC.BRIU,          KC.MPRV, KC.MPLY, KC.MNXT, KC.MUTE, KC.VOLD, KC.VOLU, LAYER_0, KC.PAUS, KC.NO,  KC.NO,\
-    KC.NO,  KC.NO, KC.NO, KC.NO, KC.NO,   KC.NO,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.MJ_TOGGLE,      LAYER_2, KC.NO,           KC.NO,\
+    KC.NO,  KC.NO, KC.NO, KC.NO, KC.NO,   KC.NO,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, MJ_TOGGLE,         LAYER_2, KC.NO,           KC.NO,\
     KC.NO,  _L1Q_, _L1W_, _L1E_, _L1R_,   _L1T_,            _L1Y_, _L1U_, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                         KC.NO,\
     KC.NO,  KC.NO, KC.NO, _L1D_, _L1F_,   _L1G_,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                                KC.NO,\
     KC.NO,  KC.NO, KC.NO, KC.NO, KC.NO,   _L1B_,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                                KC.NO,\

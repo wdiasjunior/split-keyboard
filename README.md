@@ -1,6 +1,6 @@
 # split-keyboard
 
-This is a 87 key split ortho(ish) keyboard built using 2 Raspberry Pi Pico and the KMK firmware.
+This is an 87 key split ortho(ish) keyboard built using 2 Raspberry Pi Pico and the KMK firmware.
 
 <img src="img/img1.jpg" width="600"/>
 <br></br>
