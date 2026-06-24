@@ -88,17 +88,6 @@ keyboard.extensions.append(LEDLockStatus())
 
 keyboard.debug_enabled = True # change to False - probably has overhead issues
 
-# TODO - try home row mods
-# A - left super
-# S - left alt
-# D - left shift
-# F - left ctrl
-#
-# H - left ctrl
-# J - left shift
-# K - left alt
-# L - left super
-
 # mod keys
 HT_SPC = holdtap.HoldTap(
   tap=KC.SPC,
@@ -107,25 +96,20 @@ HT_SPC = holdtap.HoldTap(
   tap_time=200,
 )
 
-# TODO
-# - holdtap - tap left space acts as space, hold acts as mod key
-# - cheat sheet on the terminal do remind me of this shit
-
-# MODwm = KC.LCMD(KC.LALT(KC.LSFT))
 _L1Q_ = KC.LCMD(KC.N1) # firefox
 _L1W_ = KC.LCMD(KC.N2) # chrome
 _L1E_ = KC.LCMD(KC.N3) # file explorer
-_L1R_ = KC.LCMD(KC.N4) # atom
+_L1R_ = KC.LCMD(KC.N4) # atom/pulsar
 _L1T_ = KC.LCTL(KC.LALT(KC.T)) # new terminal instance
 _L1Y_ = KC.LCTL(KC.LSFT(KC.T)) # new terminal tab/reopen closed browser tab
-_L1U_ = KC.LCTL(KC.T) # new broser tab
+_L1U_ = KC.LCTL(KC.T) # new browser tab
 #
+_L1S_ = KC.LCMD(KC.N7) # stremio
 _L1D_ = KC.LCMD(KC.N8) # discord
 _L1F_ = KC.LCMD(KC.N5) # zed
 _L1G_ = KC.LCMD(KC.N9) # toggle active terminal instances
+#
 _L1B_ = KC.LCMD(KC.N6) # spotify
-
-# TODO - setup Krohnkite? switch to an actual window manager?
 
 keyboard.keymap = [
   # layer 0 - default qwerty layout
@@ -142,7 +126,7 @@ keyboard.keymap = [
     KC.NO,  KC.NO, KC.NO, KC.NO, KC.BRID, KC.BRIU,          KC.MPRV, KC.MPLY, KC.MNXT, KC.MUTE, KC.VOLD, KC.VOLU, LAYER_0, KC.PAUS, KC.NO,  KC.NO,\
     KC.NO,  KC.NO, KC.NO, KC.NO, KC.NO,   KC.NO,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, MJ_TOGGLE,         LAYER_2, KC.NO,           KC.NO,\
     KC.NO,  _L1Q_, _L1W_, _L1E_, _L1R_,   _L1T_,            _L1Y_, _L1U_, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                         KC.NO,\
-    KC.NO,  KC.NO, KC.NO, _L1D_, _L1F_,   _L1G_,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                                KC.NO,\
+    KC.NO,  KC.NO, _L1S_, _L1D_, _L1F_,   _L1G_,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                                KC.NO,\
     KC.NO,  KC.NO, KC.NO, KC.NO, KC.NO,   _L1B_,            KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO, KC.NO,                                KC.NO,\
     KC.NO,  KC.NO, KC.NO,     KC.NO,    KC.TRNS,            KC.NO, KC.NO, KC.TRNS, KC.NO, KC.NO, KC.NO, KC.NO,                              KC.NO,
   ],
