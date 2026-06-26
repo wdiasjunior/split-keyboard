@@ -50,48 +50,70 @@ LAYER_0 = KC.TO(0)
 LAYER_2 = KC.TO(2)
 MJ_TOGGLE = KC.MJ_TOGGLE
 
-# layer 2 active led
-def set_layer_led_on(key, keyboard, *args):
-  if isRightSide:
-    leds.set_brightness(50, leds=[0])
+# led status indicators (layer 2 and jiggler blink)
+class LEDStatus:
+  def __init__(self):
+    self._prev_layer_2 = False
+    self._led_on = False
+    self._last_toggle_ms = 0
+    self._blink_interval = 500
 
-def set_layer_led_off(key, keyboard, *args):
-  if isRightSide:
+  def during_bootup(self, keyboard):
     leds.set_brightness(0, leds=[0])
 
-def init_led_state(keyboard):
-  if isRightSide:
-      leds.set_brightness(0, leds=[0])
+  def before_matrix_scan(self, keyboard):
+    if not isRightSide:
+      if jiggler._is_jiggling:
+        from supervisor import ticks_ms
+        now = ticks_ms()
+        if now - self._last_toggle_ms >= self._blink_interval:
+          self._last_toggle_ms = now
+          self._led_on = not self._led_on
+          leds.set_brightness(50 if self._led_on else 0, leds=[0])
+      elif self._led_on:
+        self._led_on = False
+        leds.set_brightness(0, leds=[0])
 
-keyboard.before_start = init_led_state
+  def after_matrix_scan(self, keyboard):
+    pass
 
-LAYER_2.after_press_handler(set_layer_led_on)
-LAYER_0.after_press_handler(set_layer_led_off)
+  def process_key(self, keyboard, key, is_press, int_coord):
+    return key
 
-# jiggler active led
-jiggler_active = False
+  def before_hid_send(self, keyboard):
+    pass
 
-def toggle_jiggler_led(key, keyboard, *args):
-  global jiggler_active
-  jiggler_active = not jiggler_active
-  leds.set_brightness(50 if jiggler_active else 0, leds=[0])
+  def after_hid_send(self, keyboard):
+    if isRightSide:
+      in_layer_2 = 2 in keyboard.active_layers
+      if in_layer_2 != self._prev_layer_2:
+        self._prev_layer_2 = in_layer_2
+        leds.set_brightness(50 if in_layer_2 else 0, leds=[0])
 
-MJ_TOGGLE.after_press_handler(toggle_jiggler_led)
+  def on_powersave_enable(self, keyboard):
+    pass
+
+  def on_powersave_disable(self, keyboard):
+    pass
+
+  def deinit(self, keyboard):
+    pass
 
 keyboard.modules.append(layers)
 keyboard.modules.append(split)
 keyboard.modules.append(holdtap)
 keyboard.modules.append(jiggler)
+keyboard.modules.append(LEDStatus())
 keyboard.extensions.append(leds)
 keyboard.extensions.append(MediaKeys())
 keyboard.extensions.append(LEDLockStatus())
 
-keyboard.debug_enabled = True # change to False - probably has overhead issues
+keyboard.debug_enabled = False
 
 # mod keys
-HT_SPC = holdtap.HoldTap(
-  tap=KC.SPC,
-  hold=KC.MO(1),
+HT_SPC = KC.HT(
+  KC.SPC,
+  KC.MO(1),
   prefer_hold=True,
   tap_time=200,
 )
