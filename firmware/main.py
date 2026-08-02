@@ -111,13 +111,6 @@ keyboard.extensions.append(LEDLockStatus())
 keyboard.debug_enabled = False
 
 # mod keys
-HT_SPC = KC.HT(
-  KC.SPC,
-  KC.MO(1),
-  prefer_hold=True,
-  tap_time=200,
-)
-
 _L1Q_ = KC.LCMD(KC.N1) # firefox
 _L1W_ = KC.LCMD(KC.N2) # chrome
 _L1E_ = KC.LCMD(KC.N3) # file explorer
@@ -132,6 +125,7 @@ _L1F_ = KC.LCMD(KC.N5) # zed
 _L1G_ = KC.LCMD(KC.N9) # toggle active terminal instances
 #
 _L1B_ = KC.LCMD(KC.N6) # spotify
+#
 
 keyboard.keymap = [
   # layer 0 - default qwerty layout
@@ -141,7 +135,7 @@ keyboard.keymap = [
     KC.TAB,  KC.Q,    KC.W,    KC.E,   KC.R,   KC.T,        KC.Y, KC.U, KC.I, KC.O, KC.P, KC.LBRC, KC.RBRC, KC.BSLS,              KC.END,\
     KC.CAPS, KC.A,    KC.S,    KC.D,   KC.F,   KC.G,        KC.H, KC.J, KC.K, KC.L, KC.SCLN, KC.QUOT, KC.ENTER,                   KC.PGUP,\
     KC.LSFT, KC.Z,    KC.X,    KC.C,   KC.V,   KC.B,        KC.N, KC.M, KC.COMMA, KC.DOT, KC.SLSH, KC.RSFT, KC.UP,                KC.PGDOWN,\
-    KC.LCTL, KC.LCMD, KC.LALT,    KC.SPC,    HT_SPC,        KC.SPC, KC.RALT, KC.MO(1), KC.RCTL, KC.LEFT, KC.DOWN, KC.RIGHT,       KC.RCMD,
+    KC.LCTL, KC.LCMD, KC.LALT,   KC.SPC,   KC.MO(1),        KC.SPC, KC.RALT, KC.MO(1), KC.RCTL, KC.LEFT, KC.DOWN, KC.RIGHT,       KC.RCMD,
   ],
   # layer 1 - media controls and window manager stuff
   [
